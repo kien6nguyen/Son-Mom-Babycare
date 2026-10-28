@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: son-babycare-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: son_babycare
+      POSTGRES_USER: son_admin
+      POSTGRES_PASSWORD: son_secret_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - son_pgdata:/var/lib/postgresql/data
+      - ./backend/docker-entrypoint-initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U son_admin -d son_babycare"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  son_pgdata:
